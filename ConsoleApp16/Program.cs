@@ -24,18 +24,18 @@ namespace ConsoleApp16
 
                 c.ReceiveEndpoint("fox-queue", cf =>
                 {
+                    cf.UseConcurrencyLimit(5);
+
                     cf.Instance(new MyConsumer());
-                    //cf.Consumer(() => new MyConsumer());
                     //cf.Consumer<MyConsumer>();
 
                     cf.PrefetchCount = 40;
-                    cf.UseConcurrencyLimit(5);
                 });
             });
 
             await bus.StartAsync();
 
-            Console.WriteLine("bla");
+            Console.WriteLine("started.");
             Console.ReadLine();
 
         }
@@ -60,13 +60,7 @@ namespace ConsoleApp16
 
             Console.WriteLine($"[{id}] starting fox {context.Message.Id} (c {Program.concurrency})");
 
-            //Thread.Sleep(10000);
-
-            Task.Run(() =>
-            {
-                Thread.Sleep(10000);
-
-            }).Wait();
+            Thread.Sleep(3000);
 
             Console.WriteLine($"[{id}] finish fox {context.Message.Id}  (c {Program.concurrency})");
 
